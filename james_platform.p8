@@ -1,9 +1,47 @@
 pico-8 cartridge // http://www.pico-8.com
 version 39
 __lua__
+player = {} -- initialising the object
+player.x = 50 -- this will hold the playerヌ█▥s x co-ordinate
+player.y = 50 -- this will hold the playerヌ█▥s y co-ordinate
+player.sprite = 0 -- the current player sprite
+player.speed = 2 -- the speed at which the player is going to move
+player.moving = false -- is used as a marker to see if the player is moving
+
+function moveanim()
+    player.moving = true -- set the marker to indicate that the player is moving
+    player.sprite = player.sprite + 1
+    -- check if the index is between 0 and 2
+    if player.sprite > 2 then
+        player.sprite = 0 -- if the index is over 2, reset
+    end
+end
+
+function _update() --called at 30fps
+    player.moving = false
+    if (btn(0)) then -- if left key is pressed
+        player.x -= player.speed -- decrease the x by the speed
+        if player.x < -10 then -- if the character moves beyond the left bound
+            player.x = 128 -- place character at the other side of the screen
+        end
+        moveanim() -- call the move function
+    end
+    if (btn(1)) then
+        player.x += player.speed
+        if player.x > 128 then
+            player.x = -10
+        end
+        moveanim()
+    end
+    if not player.moving then
+        player.sprite = 0
+    end
+end
+
 function _draw()
     cls() -- clear screen
-    spr(0, 50, 50) -- sprite index, x, y
+    spr( player.sprite, player.x, player.y) -- draw the sprite using the values of our player object 
+    print("x :"..player.x, 0, 0) -- log the x value
 end
 __gfx__
 00707000007070000070700000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
