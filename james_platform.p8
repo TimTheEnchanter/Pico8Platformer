@@ -7,6 +7,13 @@ player.y = 92 -- this will hold the playerヌ█▥s y co-ordinate
 player.sprite = 0 -- the current player sprite
 player.speed = 2 -- the speed at which the player is going to move
 player.moving = false -- is used as a marker to see if the player is moving
+player.isintro = true
+
+jamestext = {}
+jamestext.x = -5
+jamestext.y = 5
+jamestext.speed = 1
+jamestext.xlimit = 35
 
 function moveanim()
     player.moving = true -- set the marker to indicate that the player is moving
@@ -15,6 +22,21 @@ function moveanim()
     if player.sprite > 2 then
         player.sprite = 0 -- if the index is over 2, reset
     end
+end
+
+function showintrotext()
+	if jamestext.x < jamestext.xlimit then
+		jamestext.x += jamestext.speed
+	end
+	print("james platform", jamestext.x, 10) 
+
+	if player.isintro == true then
+		player.x += player.speed 
+		moveanim()
+		if player.x >= jamestext.xlimit then 
+			player.isintro = false	
+		end
+	end
 end
 
 function _update() --called at 30fps
@@ -43,6 +65,7 @@ function _draw()
     spr( player.sprite, player.x, player.y) -- draw the sprite using the values of our player object 
     map(0,0,0,20,124,124)
     print("x :"..player.x, 0, 0) -- log the x value
+				showintrotext()
 end
 __gfx__
 00707000007070000070700000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
